@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e0f13" media="(prefers-color-scheme: dark)" />
+  <meta name="description" content="Ψηφιακό μενού — ΦίΛιΠs γαστροθίορι, Est. 2023. Every Drink Shines." />
+  <title>ΦίΛιΠs — Μενού</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Permanent+Marker&family=Poppins:wght@300;400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+  /* ============================================================
+     ΦίΛιΠs — Design System (single-file έκδοση)
+     ============================================================ */
+  :root {
+    --terracotta: #C8794E;
+    --sage: #8FB08A;
+    --ink: #1c1c1c;
+    --line: #d9d9d9;
+    --bg: #ffffff;
+    --card: rgba(255, 255, 255, 0.82);
+    --card-border: rgba(255, 255, 255, 0.6);
+    --text: #1c1c1c;
+    --text-soft: #555;
+    --price: #C8794E;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+    --font-display: "Caveat", "Permanent Marker", cursive;
+    --font-marker: "Permanent Marker", "Caveat", cursive;
+    --font-body: "Poppins", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --maxw: 480px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e0f13;
+      --card: rgba(28, 30, 38, 0.78);
+      --card-border: rgba(255, 255, 255, 0.10);
+      --text: #f2f2f2;
+      --text-soft: #b9b9c0;
+      --line: #33353d;
+      --ink: #f2f2f2;
+      --price: #e3a07a;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh; min-height: 100dvh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  .app { max-width: var(--maxw); margin: 0 auto; position: relative; min-height: 100vh; min-height: 100dvh; }
+
+  .view { display: none; animation: fade .35s ease; }
+  .view.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* (Α) SPLASH */
+  #view-splash {
+    min-height: 100vh; min-height: 100dvh;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 32px 24px; background: var(--bg);
+  }
+  #view-splash.active { display: flex; }
+
+  .logo-frame { border: 1.5px solid var(--line); border-radius: 6px; padding: 40px 34px; position: relative; background: var(--bg); }
+  .logo-frame::before, .logo-frame::after { content: ""; position: absolute; width: 22px; height: 22px; border: 1.5px solid var(--line); }
+  .logo-frame::before { top: -8px; left: -8px; border-right: none; border-bottom: none; }
+  .logo-frame::after  { bottom: -8px; right: -8px; border-left: none; border-top: none; }
+
+  .logo-word { font-family: var(--font-body); font-weight: 800; font-size: 3.1rem; letter-spacing: 1px; line-height: 1; color: var(--ink); display: inline-flex; align-items: baseline; gap: 2px; }
+  .logo-word .dot { display: inline-block; width: .42em; height: .42em; border-radius: 50%; margin: 0 .04em; transform: translateY(-.55em); }
+  .logo-word .dot.terra { background: var(--terracotta); }
+  .logo-word .dot.sage  { background: var(--sage); }
+  .logo-word .sq { display: inline-block; width: .3em; height: .3em; margin-left: .06em; background: var(--sage); transform: translateY(-.7em) rotate(12deg); }
+
+  .logo-tagline { margin-top: 16px; font-weight: 300; letter-spacing: 3px; font-size: .95rem; color: var(--text-soft); text-transform: lowercase; }
+  .logo-est { margin-top: 6px; font-size: .72rem; letter-spacing: 2px; color: var(--text-soft); }
+  .splash-tagline { margin-top: 26px; font-family: var(--font-display); font-size: 1.5rem; color: var(--terracotta); }
+
+  .btn-enter {
+    margin-top: 34px; border: none; cursor: pointer; font-family: var(--font-body);
+    font-weight: 600; font-size: 1.05rem; color: #fff;
+    background: linear-gradient(135deg, var(--terracotta), #b3673f);
+    padding: 15px 42px; border-radius: 999px; letter-spacing: .5px;
+    box-shadow: 0 10px 24px rgba(200, 121, 78, 0.35);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-enter:active { transform: scale(0.96); }
+
+  /* (Β) ΜΕΝΟΥ */
+  #view-categories, #view-products { min-height: 100vh; min-height: 100dvh; position: relative; isolation: isolate; }
+
+  .holo-bg {
+    position: fixed; inset: 0; z-index: -1;
+    background: linear-gradient(115deg, #ffd9ec 0%, #d9e9ff 20%, #d9fff0 40%, #fff6d9 60%, #e9d9ff 80%, #d9fbff 100%);
+    background-size: 300% 300%; animation: holo 18s ease infinite;
+  }
+  @keyframes holo { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  @media (prefers-color-scheme: dark) {
+    .holo-bg {
+      background: linear-gradient(115deg, #2a1830 0%, #182a3a 25%, #103028 45%, #2e2810 65%, #241638 82%, #102a30 100%);
+      background-size: 300% 300%; opacity: 0.95;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) { .holo-bg, .view { animation: none !important; } }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; backdrop-filter: blur(8px);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.55), rgba(255,255,255,0.0));
+  }
+  @media (prefers-color-scheme: dark) { .topbar { background: linear-gradient(to bottom, rgba(14,15,19,0.65), rgba(14,15,19,0.0)); } }
+
+  .btn-back {
+    border: none; background: var(--card); border: 1px solid var(--card-border); color: var(--text);
+    font-family: var(--font-body); font-weight: 600; font-size: .9rem; padding: 9px 16px;
+    border-radius: 999px; cursor: pointer; box-shadow: var(--shadow);
+  }
+  .btn-back:active { transform: scale(0.96); }
+
+  .topbar-brand { font-weight: 800; font-size: 1.05rem; letter-spacing: .5px; }
+  .topbar-brand .accent { color: var(--terracotta); }
+
+  .lang-toggle { margin-left: auto; display: inline-flex; border: 1px solid var(--card-border); border-radius: 999px; overflow: hidden; background: var(--card); box-shadow: var(--shadow); }
+  .lang-toggle button { border: none; background: transparent; color: var(--text-soft); font-family: var(--font-body); font-weight: 700; font-size: .78rem; padding: 7px 12px; cursor: pointer; }
+  .lang-toggle button.on { background: var(--ink); color: var(--bg); }
+
+  .page-head { text-align: center; padding: 6px 20px 14px; position: relative; }
+  .page-head h1 { font-family: var(--font-marker); font-weight: 400; font-size: 2.5rem; line-height: 1.05; color: var(--ink); letter-spacing: .5px; }
+  .page-head .sub { font-family: var(--font-display); font-size: 1.45rem; color: var(--terracotta); margin-top: -2px; }
+  .doodle { font-size: 1.2rem; letter-spacing: 6px; opacity: .8; }
+
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 8px 16px 28px; }
+  .cat-card { position: relative; background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; padding: 22px 14px 18px; text-align: center; cursor: pointer; box-shadow: var(--shadow); backdrop-filter: blur(6px); transition: transform .15s ease; overflow: hidden; }
+  .cat-card:active { transform: scale(0.97); }
+  .cat-card::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--terracotta), var(--sage), #6aa6ff); }
+  .cat-card .ic { font-size: 2.4rem; display: block; margin-bottom: 8px; }
+  .cat-card .t { font-family: var(--font-marker); font-weight: 400; font-size: 1.3rem; color: var(--ink); line-height: 1.1; }
+  .cat-card .st { font-size: .72rem; color: var(--text-soft); margin-top: 4px; }
+  .cat-card .count { display: inline-block; margin-top: 8px; font-size: .68rem; font-weight: 700; color: var(--terracotta); background: rgba(200,121,78,0.12); padding: 2px 10px; border-radius: 999px; }
+
+  .items-wrap { padding: 4px 16px 40px; }
+  .subgroup-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--terracotta); margin: 18px 4px 8px; display: flex; align-items: center; gap: 8px; }
+  .subgroup-title::before { content: "✦"; font-size: .9rem; }
+
+  .item { display: flex; align-items: flex-start; gap: 12px; background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 14px 16px; margin-bottom: 11px; box-shadow: var(--shadow); backdrop-filter: blur(6px); }
+  .item .body { flex: 1; min-width: 0; }
+  .item .name { font-weight: 700; font-size: 1.02rem; color: var(--text); letter-spacing: .2px; }
+  .item .desc { font-size: .85rem; color: var(--text-soft); margin-top: 3px; }
+  .item .price { flex-shrink: 0; font-family: var(--font-marker); font-weight: 400; font-size: 1.15rem; color: var(--price); white-space: nowrap; padding-top: 1px; }
+  .item .price .eur { font-size: .85em; }
+
+  .footer { text-align: center; padding: 22px 16px 34px; font-size: .78rem; color: var(--text-soft); }
+  .footer .slogan { font-family: var(--font-display); font-size: 1.2rem; color: var(--terracotta); margin-bottom: 6px; }
+  .footer .mark { display: inline-block; margin-top: 8px; font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; opacity: .7; }
+
+  .zine-tag { position: fixed; font-family: var(--font-marker); font-size: .7rem; letter-spacing: 1px; color: var(--ink); opacity: .25; pointer-events: none; z-index: -1; transform: rotate(-8deg); }
+  .zine-tag.t1 { top: 120px; right: 8px; transform: rotate(8deg); }
+  .zine-tag.t2 { bottom: 80px; left: 6px; }
+
+  button { min-height: 44px; }
+  @media (max-width: 340px) { .logo-word { font-size: 2.5rem; } .cat-grid { gap: 10px; } }
+  </style>
+</head>
+<body>
+  <div class="holo-bg" aria-hidden="true"></div>
+  <div class="zine-tag t1" aria-hidden="true">creativity takes courage ™</div>
+  <div class="zine-tag t2" aria-hidden="true">NEVER STOP</div>
+
+  <div class="app">
+    <!-- SPLASH -->
+    <section id="view-splash" class="view active">
+      <div class="logo-frame">
+        <div class="logo-word">Φί<span class="dot terra"></span>Λι<span class="dot sage"></span>Π<span>s</span><span class="sq"></span></div>
+        <div class="logo-tagline">γαστροθίορι</div>
+        <div class="logo-est">EST. 2023</div>
+      </div>
+      <div class="splash-tagline">Every Drink Shines ✦</div>
+      <button id="btn-enter" class="btn-enter">Δες το μενού</button>
+    </section>
+
+    <!-- ΚΑΤΗΓΟΡΙΕΣ -->
+    <section id="view-categories" class="view">
+      <div class="topbar">
+        <button class="btn-back" style="visibility:hidden">←</button>
+        <span class="topbar-brand">Φί<span class="accent">Λ</span>ιΠs</span>
+        <div class="lang-toggle" role="group" aria-label="Γλώσσα">
+          <button data-lang="gr">GR</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+      <div class="page-head">
+        <div class="doodle">✦ ◜◝ ✦</div>
+        <h1 id="cat-page-title">Κατηγορίες</h1>
+      </div>
+      <div id="cat-grid" class="cat-grid"></div>
+      <div class="footer">
+        <div class="slogan footer-slogan">Every Drink Shines</div>
+        <div class="footer-powered">Powered by Φίλιπς © 2025</div>
+        <div class="mark">creativity takes courage ™</div>
+      </div>
+    </section>
+
+    <!-- ΠΡΟΪΟΝΤΑ -->
+    <section id="view-products" class="view">
+      <div class="topbar">
+        <button class="btn-back">← Πίσω</button>
+        <span class="topbar-brand">Φί<span class="accent">Λ</span>ιΠs</span>
+        <div class="lang-toggle" role="group" aria-label="Γλώσσα">
+          <button data-lang="gr">GR</button>
+          <button data-lang="en">EN</button>
+        </div>
+      </div>
+      <div class="page-head">
+        <h1 id="prod-title">—</h1>
+        <div id="prod-sub" class="sub"></div>
+      </div>
+      <div id="items-wrap" class="items-wrap"></div>
+      <div class="footer">
+        <div class="slogan footer-slogan">Spirits, Stories, Sensations</div>
+        <div class="footer-powered">Powered by Φίλιπς © 2025</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+  // ============================================================
+  //  ΔΕΔΟΜΕΝΑ ΜΕΝΟΥ — ΕΔΩ ΑΛΛΑΖΕΙΣ ΤΙΜΕΣ & ΠΡΟΪΟΝΤΑ
+  //  (αλλάζεις μόνο το νούμερο μέσα στο price: "...")
+  // ============================================================
+  const MENU = {
+    brand: {
+      name: "ΦίΛιΠs", tagline: "γαστροθίορι", est: "Est. 2023",
+      slogans: ["Every Drink Shines", "Spirits, Stories, Sensations", "Keep the lights on"]
+    },
+    categories: [
+      {
+        id: "coffee", icon: "☕", title: "Coffee", titleGr: "Καφέδες", subtitle: "Keep the lights on",
+        // ΣΗΜ.: ΕΝΔΕΙΚΤΙΚΕΣ τιμές — διόρθωσέ τις.
+        items: [
+          { name: "Ελληνικός μονός", desc: "", price: "2.0" },
+          { name: "Ελληνικός διπλός", desc: "", price: "2.5" },
+          { name: "Espresso", desc: "", price: "2.0" },
+          { name: "Espresso διπλός", desc: "", price: "2.5" },
+          { name: "Espresso macchiato", desc: "", price: "2.2" },
+          { name: "Freddo espresso", desc: "", price: "3.0" },
+          { name: "Cappuccino", desc: "", price: "3.0" },
+          { name: "Freddo cappuccino", desc: "", price: "3.5" },
+          { name: "Latte", desc: "", price: "3.2" },
+          { name: "Freddo latte", desc: "", price: "3.5" },
+          { name: "Flat white", desc: "", price: "3.3" },
+          { name: "Cortado", desc: "", price: "2.8" },
+          { name: "Americano", desc: "", price: "2.8" },
+          { name: "Καφές φίλτρου", desc: "", price: "3.0" },
+          { name: "Φραπέ", desc: "", price: "2.5" },
+          { name: "Mocha", desc: "", price: "3.5" },
+          { name: "Ζεστή σοκολάτα", desc: "", price: "3.5" },
+          { name: "Τσάι / αφέψημα", desc: "", price: "2.8" }
+        ]
+      },
+      {
+        id: "cocktails", icon: "🌈", title: "Rainbow Cocktails", titleGr: "Cocktails", subtitle: "Every Drink Shines",
+        items: [
+          { name: 'RED — "The Fiery One"', desc: "Bourbon, coconut, sweet vermouth, red berries, acids", price: "9.0" },
+          { name: 'ORANGE — "Citrus Glow"', desc: "Olmeca blanco tequila, coco, carrot, ginger, acids & celery salt", price: "9.0" },
+          { name: 'YELLOW — "Sunburst Sip"', desc: "Chamomile cocchi americano, labdanum, CO2, parmesan chip", price: "9.0" },
+          { name: 'GREEN — "Garden Zest"', desc: "Pistachio Absolut vodka, cacao, salted caramel & acids", price: "8.0" },
+          { name: 'BLUE — "Ocean Chill"', desc: "Absolut vodka, blue curaçao, apricots, ginger, acids & berries foam", price: "9.0" },
+          { name: 'INDIGO — "Midnight Bloom"', desc: "Butterfly pea Beefeater gin, cucumber, ginger & elderflower CO2", price: "9.0" },
+          { name: 'AZURE — "Skyline Sip"', desc: "Blend of rums, banana, cacao, acids, blue curaçao & foamer", price: "9.0" }
+        ]
+      },
+      {
+        id: "spritz", icon: "🥂", title: "Spritz", titleGr: "Spritz", subtitle: "Light & sparkling",
+        items: [
+          { name: "Silky Garden Spritz", desc: "Absolut vodka, apple, fresh cucumber, homemade orgeat syrup, acids & sparkling wine", price: "8.0" },
+          { name: "Peach Bloom", desc: "White bitter liqueur, toasted peach & sparkling wine", price: "8.0" },
+          { name: "Velvet Sparkle", desc: "Martini bitter, hibiscus & beetroot soda", price: "8.0" }
+        ]
+      },
+      {
+        id: "hot", icon: "🔥", title: "Hot Cocktails", titleGr: "Ζεστά Cocktails", subtitle: "Warm & spiced",
+        items: [
+          { name: "Hot Elixir", desc: "Metaxa 5 stars, apple, ginger & spices", price: "8.0" },
+          { name: "Polar Kiss", desc: "Spiced rum, hibiscus, maraschino, red berries & acids", price: "9.0" },
+          { name: "Chamomile Delight", desc: "Beefeater gin, chamomile, honey & ginger", price: "8.0" }
+        ]
+      },
+      {
+        id: "nonalcohol", icon: "🍃", title: "Non Alcohol", titleGr: "Χωρίς Αλκοόλ", subtitle: "Mocktails",
+        items: [
+          { name: "Flower Power", desc: "Martini floreale, roses, elderflower, acids & CO2", price: "7.0" },
+          { name: "Berries Mule", desc: "Beefeater 0.0, red berries, coconut, acids & ginger beer", price: "8.0" }
+        ]
+      },
+      {
+        id: "wine", icon: "🍷", title: "Wine", titleGr: "Κρασί", subtitle: "Urban pours for urban souls",
+        // Τιμές "7.0 / 28.0" = ποτήρι / φιάλη. ⚠ Επιβεβαίωσε ονόματα & τιμές.
+        items: [
+          { name: "Meteoro", desc: "Ερυθρό — (επιβεβαίωσε ποικιλία/περιοχή)", price: "7.0 / 28.0" },
+          { name: "Portes Σκούρα", desc: "Ερυθρό — Merlot, Κτήμα Σκούρα", price: "7.0 / 28.0" },
+          { name: "Limniona", desc: "Ερυθρό — Κτήμα Ζαφειράκη, Τύρναβος–Λάρισα", price: "7.0 / 30.0" },
+          { name: "Bostani", desc: "Ερυθρό — Αμπελώνες Αμύνταιο–Φλώρινα", price: "34.0" },
+          { name: "Psani Old Vines", desc: "Ερυθρό — Βιολογικής Γεωργίας", price: "36.0" },
+          { name: "Moscato d'Asti", desc: "Αφρώδες", price: "7.0 / 35.0" },
+          { name: "Martini Prosecco", desc: "Αφρώδες", price: "7.0 / 35.0" },
+          { name: "Louis Roederer Brut Champagne", desc: "Αφρώδες — Champagne", price: "100.0" }
+        ]
+      },
+      {
+        id: "whiskey", icon: "🥃", title: "Whiskey", titleGr: "Ουίσκι", subtitle: "Spirits, Stories, Sensations",
+        // Το "group" ομαδοποιεί τα ουίσκι σε υπο-κατηγορίες.
+        items: [
+          { name: "Dewar's", group: "Scotch Whisky", desc: "", price: "8.0" },
+          { name: "Famous Grouse", group: "Scotch Whisky", desc: "", price: "8.0" },
+          { name: "Haig", group: "Scotch Whisky", desc: "", price: "8.0" },
+          { name: "Ballantine's", group: "Scotch Whisky", desc: "", price: "8.0" },
+          { name: "Cutty Sark", group: "Scotch Whisky", desc: "", price: "8.0" },
+          { name: "Dewar's 8yo Illegal Smooth", group: "Scotch Whisky", desc: "", price: "8.0" },
+          { name: "Johnnie Walker Black Label", group: "Scotch Whisky", desc: "", price: "9.0" },
+          { name: "Chivas Regal 12 Years Old", group: "Scotch Whisky", desc: "", price: "9.0" },
+          { name: "Dimple Golden Selection", group: "Scotch Whisky", desc: "", price: "9.0" },
+          { name: "Cutty Sark 12 Years Old", group: "Scotch Whisky", desc: "", price: "10.0" },
+          { name: "Canadian", group: "American Whiskey", desc: "", price: "8.0" },
+          { name: "Jack Daniel's", group: "American Whiskey", desc: "", price: "9.0" },
+          { name: "Jack Daniel's Single Barrel", group: "American Whiskey", desc: "", price: "10.0" },
+          { name: "Jack Daniel's Honey", group: "American Whiskey", desc: "", price: "9.0" },
+          { name: "Four Roses", group: "American Whiskey", desc: "", price: "8.0" },
+          { name: "Maker's Mark", group: "American Whiskey", desc: "", price: "9.0" },
+          { name: "Woodford Reserve", group: "American Whiskey", desc: "", price: "10.0" },
+          { name: "Bulleit Rye", group: "American Whiskey", desc: "", price: "10.0" },
+          { name: "Bulleit Bourbon", group: "American Whiskey", desc: "", price: "9.0" },
+          { name: "Buffalo Trace", group: "American Whiskey", desc: "", price: "10.0" },
+          { name: "Cardhu 12 Years Old", group: "Single Malt Whisky", desc: "", price: "10.0" },
+          { name: "Laphroaig 10 Years Old", group: "Single Malt Whisky", desc: "", price: "12.0" },
+          { name: "Glenfiddich 12 Years Old", group: "Single Malt Whisky", desc: "", price: "10.0" },
+          { name: "Talisker 10 Years Old", group: "Single Malt Whisky", desc: "", price: "12.0" },
+          { name: "Jameson", group: "Irish Whiskey", desc: "", price: "8.0" },
+          { name: "Jameson Triple Triple", group: "Irish Whiskey", desc: "Marsala cask edition (επιβεβαίωσε τιμή)", price: "—" },
+          { name: "Bushmills Original", group: "Irish Whiskey", desc: "", price: "8.0" },
+          { name: "Bushmills 10 Years Old", group: "Irish Whiskey", desc: "", price: "10.0" },
+          { name: "Tullamore Dew", group: "Irish Whiskey", desc: "", price: "8.0" },
+          { name: "Jameson Black Barrel", group: "Irish Whiskey", desc: "", price: "10.0" },
+          { name: "Teeling Small Batch", group: "Irish Whiskey", desc: "", price: "10.0" },
+          { name: "Teeling Single Grain", group: "Irish Whiskey", desc: "", price: "11.0" },
+          { name: "Dunville's Three Crowns", group: "Irish Whiskey", desc: "", price: "12.0" },
+          { name: "Nikka From The Barrel", group: "Japanese Whisky", desc: "", price: "14.0" }
+        ]
+      }
+    ]
+  };
+
+  // ============================================================
+  //  ΛΟΓΙΚΗ (πλοήγηση & rendering)
+  // ============================================================
+  (function () {
+    "use strict";
+
+    // localStorage με προστασία (μερικά sandbox το μπλοκάρουν)
+    const store = {
+      get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    };
+
+    const I18N = {
+      gr: { enter: "Δες το μενού", back: "← Πίσω", categories: "Κατηγορίες", items: "προϊόντα", poweredBy: "Powered by Φίλιπς © 2025" },
+      en: { enter: "View Menu", back: "← Back", categories: "Categories", items: "items", poweredBy: "Powered by Φίλιπς © 2025" }
+    };
+
+    let lang = store.get("filips-lang") || "gr";
+
+    const $ = (sel) => document.querySelector(sel);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const catTitle = (cat) => (lang === "gr" ? (cat.titleGr || cat.title) : cat.title);
+
+    function fmtPrice(price) {
+      if (!price || price === "—") return esc(price || "");
+      return esc(price).split("/").map((p) => p.trim()).map((p) => `${p}<span class="eur">€</span>`).join(" / ");
+    }
+
+    function renderCategories() {
+      const grid = $("#cat-grid");
+      grid.innerHTML = MENU.categories.map((cat) => {
+        const sub = cat.subtitle ? `<span class="st">${esc(cat.subtitle)}</span>` : "";
+        return `
+        <div class="cat-card" data-cat="${esc(cat.id)}" role="button" tabindex="0">
+          <span class="ic">${esc(cat.icon || "•")}</span>
+          <span class="t">${esc(catTitle(cat))}</span>
+          ${sub}
+          <span class="count">${cat.items.length} ${I18N[lang].items}</span>
+        </div>`;
+      }).join("");
+    }
+
+    function renderProducts(catId) {
+      const cat = MENU.categories.find((c) => c.id === catId);
+      if (!cat) { goto("categories"); return; }
+      $("#prod-title").textContent = catTitle(cat);
+      $("#prod-sub").textContent = cat.subtitle || "";
+      const wrap = $("#items-wrap");
+      const hasGroups = cat.items.some((it) => it.group);
+      if (hasGroups) {
+        const groups = groupBy(cat.items, (it) => it.group || "");
+        wrap.innerHTML = Object.keys(groups).map((g) => {
+          const head = g ? `<h2 class="subgroup-title">${esc(g)}</h2>` : "";
+          return head + groups[g].map((it) => itemHTML(it)).join("");
+        }).join("");
+      } else {
+        wrap.innerHTML = cat.items.map((it) => itemHTML(it)).join("");
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function groupBy(arr, keyFn) {
+      return arr.reduce((acc, x) => { const k = keyFn(x); (acc[k] = acc[k] || []).push(x); return acc; }, {});
+    }
+
+    function itemHTML(it) {
+      const desc = it.desc ? `<div class="desc">${esc(it.desc)}</div>` : "";
+      return `
+      <div class="item">
+        <div class="body">
+          <div class="name">${esc(it.name)}</div>
+          ${desc}
+        </div>
+        <div class="price">${fmtPrice(it.price)}</div>
+      </div>`;
+    }
+
+    function showView(id) {
+      document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+      const el = document.getElementById("view-" + id);
+      if (el) el.classList.add("active");
+    }
+
+    function route() {
+      const hash = location.hash.replace(/^#/, "");
+      if (!hash || hash === "splash") { showView("splash"); }
+      else if (hash === "menu" || hash === "categories") { renderCategories(); showView("categories"); }
+      else if (hash.indexOf("cat/") === 0) { renderProducts(hash.slice(4)); showView("products"); }
+      else { showView("splash"); }
+    }
+
+    function goto(target) {
+      if (target === "splash") location.hash = "";
+      else if (target === "categories") location.hash = "menu";
+      else if (target.indexOf("cat:") === 0) location.hash = "cat/" + target.slice(4);
+      // Άμεση κλήση: δεν βασιζόμαστε μόνο στο hashchange (κάποια webview δεν το πυροδοτούν).
+      route();
+    }
+
+    function applyLang() {
+      document.documentElement.lang = lang === "gr" ? "el" : "en";
+      $("#btn-enter").textContent = I18N[lang].enter;
+      document.querySelectorAll(".btn-back").forEach((b) => { if (b.style.visibility !== "hidden") b.textContent = I18N[lang].back; });
+      $("#cat-page-title").textContent = I18N[lang].categories;
+      document.querySelectorAll(".footer-powered").forEach((f) => (f.textContent = I18N[lang].poweredBy));
+      document.querySelectorAll(".lang-toggle button").forEach((b) => b.classList.toggle("on", b.dataset.lang === lang));
+    }
+
+    function setLang(l) {
+      lang = l; store.set("filips-lang", l); applyLang();
+      if (document.getElementById("view-categories").classList.contains("active")) renderCategories();
+      route();
+    }
+
+    function bind() {
+      $("#btn-enter").addEventListener("click", () => goto("categories"));
+      $("#cat-grid").addEventListener("click", (e) => { const card = e.target.closest(".cat-card"); if (card) goto("cat:" + card.dataset.cat); });
+      $("#cat-grid").addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { const card = e.target.closest(".cat-card"); if (card) { e.preventDefault(); goto("cat:" + card.dataset.cat); } }
+      });
+      document.querySelectorAll(".btn-back").forEach((b) => b.addEventListener("click", () => goto("categories")));
+      document.querySelectorAll(".lang-toggle button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+      window.addEventListener("hashchange", route);
+    }
+
+    function init() {
+      if (MENU.brand) {
+        const slg = MENU.brand.slogans || [];
+        const pick = slg[Math.floor(Math.random() * slg.length)] || "Every Drink Shines";
+        document.querySelectorAll(".footer-slogan").forEach((e) => (e.textContent = pick));
+      }
+      bind(); applyLang(); renderCategories(); route();
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+  </script>
+</body>
+</html>
